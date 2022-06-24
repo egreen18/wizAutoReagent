@@ -5,6 +5,8 @@ import time
 import pyautogui as auto
 import os.path as os
 import platform
+import keyboard
+import pickle
 
 def mssMon(shape):
     # Takes a resolution in the form of a 1,4 list and prepares it for input into mss screenshot function
@@ -84,10 +86,22 @@ def jiggle():
     time.sleep(0.05)
     auto.moveTo((pos[0], pos[1]))
 
-def pressX(templates, now, runtime):
+def run(templates, now, runtime):
+    # Getting back the objects:
+    with open('tanglewood_way.txt', mode = 'rb') as file:
+        events = pickle.load(file)
+    print('Loaded data for tanglewood way.')
     while time.time() < now+runtime:
         if checkGen(templates['in_client']):
-            auto.press('x')
+            # Fixing odd bug with keyboard interpretting pickled files
+            keyboard.start_recording()
+            keyboard.stop_recording()
+
+            # Waiting to ensure movements are aligned
+            time.sleep(1)
+            
+            # Repalying pickled events
+            keyboard.replay(events)
 
 def autoReagent(runtime):
     # Initialization steps
@@ -97,4 +111,5 @@ def autoReagent(runtime):
         return
     templates = loadTemplates(os_res)
     now = time.time()
-    pressX(templates, now, runtime)
+    print('Identified OS and resolution.')
+    run(templates, now, runtime)

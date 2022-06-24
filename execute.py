@@ -1,6 +1,5 @@
-from tools import autoRun
+from tools import autoReagent
 
-snack = 1  # Decide whether or not to consume snacks with this binary
-runtime = 1000  # seconds
+runtime = 10000  # seconds
 
-autoRun(runtime, snack)
+autoReagent(runtime) 
